@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csw.dao.BookDao">
+    <resultMap type="book" id="bookMap">
+        <id column="bid" property="id"/>
+        <result column="bname" property="name"/>
+        <result column="bauthor" property="author"/>
+        <result column="bcover" property="cover"/>
+        <result column="bpress" property="press"/>
+        <result column="bpressd" property="press_date"/>
+        <result column="bedition" property="edition"/>
+        <result column="bprintd" property="print_date"/>
+        <result column="bimpression" property="impression"/>
+        <result column="bisbn" property="isbn"/>
+        <result column="bwordn" property="word_num"/>
+        <result column="bpagen" property="page_num"/>
+        <result column="bsizes" property="sizes"/>
+        <result column="bpaper" property="paper"/>
+        <result column="bpack" property="pack"/>
+        <result column="bprice" property="price"/>
+        <result column="bdprice" property="dprice"/>
+        <result column="bcreated" property="create_date"/>
+        <result column="beditorr" property="editor_recommend"/>
+        <result column="bcontenta" property="content_abstract"/>
+        <result column="bauthora" property="author_abstract"/>
+        <result column="bdirector" property="director"/>
+        <result column="bmediac" property="media_commentary"/>
+        <result column="bsale" property="sale"/>
+        <result column="bstock" property="stock"/>
+        <association property="category" javaType="Category">
+            <id column="cid" property="id"/>
+            <result column="cname" property="name"/>
+            <result column="cpid" property="parent_id"/>
+            <result column="clevels" property="levels"/>
+        </association>
+
+    </resultMap>
+    <select id="queryAllBook" resultType="Book">
+		select * from dd_book
+	</select>
+
+    <select id="queryLike" resultType="Book">
+        select * from dd_book
+        <where>
+            <if test="key=='name'">name like '%${content}%'</if>
+            <if test="key=='author'">author like '%${content}%'</if>
+            <if test="key=='press'">press like '%${content}%'</if>
+        </where>
+    </select>
+
+    <select id="queryAllConnection" resultMap="bookMap">
+		select b.id as
+		bid,b.name as bname,b.author as bauthor,b.cover as
+		bcover,b.press as
+		bpress,
+		b.press_date as bpressd,b.edition as bedition,b.print_date as
+		bprintd,
+		b.impression as bimpression,b.isbn as bisbn ,b.word_num as
+		bwordn,b.page_num as bpagen,
+		b.sizes as bsizes,b.paper as bpaper,b.pack
+		as bpack,b.price as
+		bprice,b.dprice as bdprice,
+		b.create_date as
+		bcreated,b.editor_recommend as beditorr,b.content_abstract as
+		bcontenta,
+		b.author_abstract as bauthora,b.director as
+		bdirector,b.media_commentary as bmediac,
+		b.sale as bsale,b.stock as
+		bstock,
+		c.id as cid,c.name as cname ,c.parent_id as cparentid,c.levels
+		as clevels
+		from dd_book b left join dd_category c on b.category_id=c.id
+	</select>
+
+    <select id="queryBybookId" resultMap="bookMap">
+		select b.id as
+		bid,b.name as
+		bname,b.author as bauthor,b.cover as
+		bcover,b.press as
+		bpress,
+		b.press_date as bpressd,b.edition as bedition,b.print_date as
+		bprintd,
+		b.impression as bimpression,b.isbn as bisbn ,b.word_num as
+		bwordn,b.page_num as bpagen,
+		b.sizes as bsizes,b.paper as bpaper,b.pack
+		as bpack,b.price as
+		bprice,b.dprice as bdprice,
+		b.create_date as
+		bcreated,b.editor_recommend as beditorr,b.content_abstract as
+		bcontenta,
+		b.author_abstract as bauthora,b.director as
+		bdirector,b.media_commentary as bmediac,
+		b.sale as bsale,b.stock as
+		bstock,category_id as cid
+		from dd_book b
+		where id=#{id}
+	</select>
+    <update id="updateAction">
+        update dd_book set
+        name=#{book.name},category_id=#{book.category.id},price=#{book.price},dprice=#{book.dprice},sale=#{book.sale},author=#{book.author},
+        press=#{book.press},press_date=#{book.press_date,jdbcType=NULL},edition=#{book.edition},print_date=#{book.print_date},impression=#{book.impression},isbn=#{book.isbn},
+        sizes=#{book.sizes},paper=#{book.paper},pack=#{book.pack},page_num=#{book.page_num},word_num=#{book.word_num},editor_recommend=#{book.editor_recommend},
+        content_abstract=#{book.content_abstract},author_abstract=#{book.author_abstract,jdbcType=NULL},director=#{book.director},media_commentary=#{book.media_commentary}
+        <if test="cover==null">
+        </if>
+        <if test="cover!=null">
+            ,cover=#{book.cover}
+        </if>
+        where id=#{book.id}
+    </update>
+    <insert id="addInsert">
+		insert into dd_book
+		values(#{id},#{name},#{author},#{cover},#{press},
+		#{press_date},#{edition},#{print_date},#{impression},#{isbn},#{word_num},
+		#{page_num},#{sizes},#{paper},#{pack},#{price},#{dprice},#{create_date},#{editor_recommend},
+		#{content_abstract},#{author_abstract},#{director},#{media_commentary},#{category.id},#{sale},#{stock})
+	</insert>
+    <delete id="deleteAction">
+		delete dd_book where id=#{id}
+	</delete>
+    <select id="query" resultType="Book">
+        select *
+        from(select e.*,rownum r
+        from(select * from dd_book order by
+        <if test="sale==null">create_date desc) e) where r &lt;=8</if>
+        <if test="createdate==null">to_number(sale) desc) e) where r &lt;=8 and sale!='0'
+        </if>
+        <if test="sale!=null and createdate!=null">create_date desc,to_number(sale) desc) e) where r &lt;=8
+            and
+            sale!='0' and create_date >(select sysdate - interval '7' day from
+            dual )
+        </if>
+
+    </select>
+    <!-- 前台分类 -->
+
+    <select id="queryBookByFirstCategoryId" resultType="Book">
+		select *
+		from(select e.*,rownum r from(
+		select *from dd_book b where
+		b.category_id
+		in(select id from dd_category where parent_id=#{id})) e)
+		where r &gt;=#{firstIndex} and r &lt;=#{lastIndex}
+	</select>
+
+    <select id="countByfirst" resultType="java.lang.Integer">
+		select count(*) from
+		dd_book where
+		category_id in(select id from dd_category where
+		parent_id=#{id})
+	</select>
+
+    <select id="countBySecond" resultType="java.lang.Integer">
+		select count(*) from
+		dd_book where
+		category_id=#{id}
+	</select>
+
+
+    <select id="queryBookBySecondCategoryId" resultType="Book">
+		select *
+		from(select e.*,rownum r from(
+		select *from dd_book b where
+		b.category_id
+		=#{id2}) e)
+		where r &gt;=#{firstIndex} and r
+		&lt;=#{lastIndex}
+	</select>
+    <update id="changeSaleStock">
+		update dd_book set sale=#{sale},stock=#{stock} where id=#{id}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

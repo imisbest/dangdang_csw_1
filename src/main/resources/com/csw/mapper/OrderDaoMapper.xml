@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csw.dao.OrderDao">
+    <!-- private String id; private String order_no; private Integer total;
+        private Date create_date; private String status; private Address address;
+        private User user; -->
+    <resultMap type="Order" id="orderMap">
+        <id column="oid" property="id"></id>
+        <result column="oderno" property="order_no"></result>
+        <result column="ototal" property="total"></result>
+        <result column="ocreate_date" property="create_date"></result>
+        <result column="oststus" property="status"></result>
+        <association property="address" javaType="Address">
+            <id column="aid" property="id"></id>
+            <result column="aname" property="name"></result>
+            <result column="alocal" property="local"></result>
+            <result column="azipcode" property="zip_code"></result>
+            <result column="aphone" property="phone"></result>
+        </association>
+    </resultMap>
+    <insert id="insertDD">
+		insert into dd_order
+		values(#{id},#{order_no},#{total},#{create_date},#{status},#{address.id},#{user.id})
+	</insert>
+    <select id="queryAllOrder" resultMap="orderMap">
+		select o.id as oid,o.order_no as oderno,o.total as ototal,o.create_date as
+		ocreate_date,o.status as oststus,
+		a.id as aid,a.name as aname,a.local as alocal,a.zip_code as
+		azipcode,a.phone as aphone
+		from dd_order o left join dd_address a on o.address_id=a.id
+	</select>
+    <select id="queryByid" resultType="Order">
+	 select * from dd_order where id=#{1}
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csw.dao.ItemDao">
+    <!-- private String id; private Integer count; private Date create_date;
+        private Order order; private Book book; -->
+    <!-- void insertOrder(@Param("string") String string, @Param("count") Integer
+        count, @Param("date") Date date, @Param("order") Order order, @Param("queryBybookId")
+        Book queryBybookId); -->
+
+    <!-- void insertOrder(@Param("string") String string, @Param("count") Integer
+        count, @Param("date") Date date, @Param("order") Order order, @Param("queryBybookId")
+        Book queryBybookId); -->
+    <resultMap type="Item" id="itemMap">
+        <id column="iid" property="id"></id>
+        <result column="icount" property="count"></result>
+        <result column="icreate_date" property="create_date"></result>
+
+        <association property="book" javaType="Book">
+            <id column="bid" property="id"/>
+            <result column="bname" property="name"/>
+            <result column="bauthor" property="author"/>
+            <result column="bcover" property="cover"/>
+            <result column="bpress" property="press"/>
+            <result column="bpressd" property="press_date"/>
+            <result column="bedition" property="edition"/>
+            <result column="bprintd" property="print_date"/>
+            <result column="bimpression" property="impression"/>
+            <result column="bisbn" property="isbn"/>
+            <result column="bwordn" property="word_num"/>
+            <result column="bpagen" property="page_num"/>
+            <result column="bsizes" property="sizes"/>
+            <result column="bpaper" property="paper"/>
+            <result column="bpack" property="pack"/>
+            <result column="bprice" property="price"/>
+            <result column="bdprice" property="dprice"/>
+            <result column="bcreated" property="create_date"/>
+            <result column="beditorr" property="editor_recommend"/>
+            <result column="bcontenta" property="content_abstract"/>
+            <result column="bauthora" property="author_abstract"/>
+            <result column="bdirector" property="director"/>
+            <result column="bmediac" property="media_commentary"/>
+            <result column="bsale" property="sale"/>
+            <result column="bstock" property="stock"/>
+        </association>
+    </resultMap>
+    <insert id="insertOrder">
+		insert into dd_item
+		values(#{id},#{count},#{create_date},#{order.id},#{book.id})
+	</insert>
+
+    <select id="queryAllOrder" resultType="Item">
+		select * from dd_item
+	</select>
+
+    <select id="queryByItemID" resultMap="itemMap">
+		select i.id as iid,i.count as icount,i.create_date as icreate_date,i.order_id as bid,
+		b.id as
+		bid,b.name as
+		bname,b.author as bauthor,b.cover as
+		bcover,b.press as
+		bpress,
+		b.press_date as bpressd,b.edition as bedition,b.print_date as
+		bprintd,
+		b.impression as bimpression,b.isbn as bisbn ,b.word_num as
+		bwordn,b.page_num as bpagen,
+		b.sizes as bsizes,b.paper as bpaper,b.pack
+		as bpack,b.price as
+		bprice,b.dprice as bdprice,
+		b.create_date as
+		bcreated,b.editor_recommend as beditorr,b.content_abstract as
+		bcontenta,
+		b.author_abstract as bauthora,b.director as
+		bdirector,b.media_commentary as bmediac,
+		b.sale as bsale,b.stock as
+		bstock
+		 from dd_item i left join dd_book b on i.book_id=b.id
+		where order_id=#{1}
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

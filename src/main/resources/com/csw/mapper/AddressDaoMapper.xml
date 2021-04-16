@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csw.dao.AddressDao">
+
+    <!-- private String id; private User user; private String name; private
+        String local; private String zip_code; private String phone; -->
+    <insert id="addInsert">
+		insert into dd_address
+		values(#{id},#{user.id,jdbcType=NULL},#{name},#{local},#{zip_code},#{phone})
+	</insert>
+
+
+    <select id="queryByID" resultType="Address">
+	select * from dd_address where id=#{1}
+	</select>
+    <!-- private String id;
+    private User user;
+    private String name;
+    private String local;
+    private String zip_code;
+    private String phone; -->
+    <update id="updateAddress">
+	update dd_address set name=#{name},local=#{local},zip_code=#{zip_code},phone=#{phone} where id=#{id}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

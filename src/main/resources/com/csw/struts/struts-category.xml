@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <package name="category" extends="struts-default" namespace="/category">
+        <interceptors>
+            <interceptor name="MyInterceptorAdmin"
+                         class="com.csw.interceptor.MyInterceptorAdmin"></interceptor>
+            <interceptor-stack name="myDefaultStack_h">
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+                <interceptor-ref name="MyInterceptorAdmin"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+        <!-- //后台 -->
+        <action name="category_*" class="com.csw.controller.CategoryAction"
+                method="{1}">
+            <interceptor-ref name="myDefaultStack_h"></interceptor-ref>
+            <result name="show">/back/category/show.jsp</result>
+            <result name="showAction" type="redirectAction">/category_showAction</result>
+            <result name="add-first">/back/category/add-first.jsp</result>
+            <result name="add-second">/back/category/add-second.jsp</result>
+            <result name="safeOut">/back/login2.jsp</result>
+            <result name="showSecondAction" type="redirectAction">/category_showSecondAction
+            </result>
+        </action>
+
+        <!-- //前台 -->
+        <action name="fcategory_*" class="com.csw.controller.CategoryAction"
+                method="{1}">
+            <result name="login" type="redirect">/back/login.jsp</result>
+            <result name="book_list">/front/main/book_list.jsp</result>
+        </action>
+    </package>
+
+
+</struts>

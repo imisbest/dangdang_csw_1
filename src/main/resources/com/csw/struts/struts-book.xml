@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <package name="book" extends="struts-default" namespace="/book">
+        <interceptors>
+            <interceptor name="MyInterceptorAdmin"
+                         class="com.csw.interceptor.MyInterceptorAdmin"></interceptor>
+            <interceptor-stack name="myDefaultStack_h">
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+                <interceptor-ref name="MyInterceptorAdmin"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+
+        <action name="book_*" class="com.csw.controller.BookAction"
+                method="{1}">
+            <interceptor-ref name="myDefaultStack_h"></interceptor-ref>
+            <result name="show">/back/book/show.jsp</result>
+            <result name="queryAllBook" type="redirectAction">/book_queryAllBook</result>
+            <result name="update">/back/book/update.jsp</result>
+            <result name="add">/back/book/add.jsp</result>
+            <result name="queryAllConnection" type="redirectAction">/book_queryAllConnection</result>
+            <result name="addAction" type="redirectAction">/book_addAction</result>
+            <result name="safeOut">/back/login2.jsp</result>
+        </action>
+    </package>
+
+
+</struts>

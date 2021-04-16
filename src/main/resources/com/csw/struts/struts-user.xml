@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <package name="user" extends="struts-default" namespace="/user">
+        <interceptors>
+            <interceptor name="MyInterceptorAdmin"
+                         class="com.csw.interceptor.MyInterceptorAdmin"></interceptor>
+            <interceptor-stack name="myDefaultStack_h">
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+                <interceptor-ref name="MyInterceptorAdmin"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+        <!-- 用户注册 -->
+        <action name="user_*" class="com.csw.controller.UserAction" method="{1}">
+            <result name="verify_form">/front/user/verify_form.jsp</result>
+            <result name="registNextAction" type="redirectAction">user_registNextAction</result>
+            <result name="register_form">/front/user/register_form.jsp</result>
+            <result name="login_form" type="redirect">/front/user/login_form.jsp
+            </result>
+        </action>
+        <!-- //用户登录-->
+        <action name="order_*" class="com.csw.controller.UserAction"
+                method="{1}">
+            <result name="register_ok" type="redirect">/front/user/register_ok.jsp
+            </result>
+            <result name="verify_form">/front/user/verify_form.jsp</result>
+        </action>
+        <!-- 前台主页面 -->
+        <action name="login_*" class="com.csw.controller.UserAction"
+                method="{1}">
+            <result name="showAllInformation" type="redirectAction">
+                <param name="namespace">/fmain</param>
+                <param name="actionName">fmain_showAllInformation</param>
+            </result>
+            <result name="login_form">/front/user/login_form.jsp</result>
+        </action>
+        <!-- 后台 -->
+        <action name="backuser_*" class="com.csw.controller.UserAction"
+                method="{1}">
+            <interceptor-ref name="myDefaultStack_h"></interceptor-ref>
+            <result name="show">/back/user/show.jsp</result>
+            <result name="backShowAction" type="redirectAction">/user/backuser_backShowAction
+            </result>
+            <result name="safeOut">/back/login2.jsp</result>
+        </action>
+        <!-- //验证码 -->
+        <action name="captcha" class="com.csw.controller.CaptchaAction">
+            <!-- 以IO流的方式响应结果 -->
+            <result type="stream"></result>
+        </action>
+
+    </package>
+
+
+</struts>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+        "http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <package name="address" extends="struts-default" namespace="/address">
+        <interceptors>
+            <interceptor name="MyInterceptorAdmin"
+                         class="com.csw.interceptor.MyInterceptorAdmin"></interceptor>
+            <interceptor-stack name="myDefaultStack_h">
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+                <interceptor-ref name="MyInterceptorAdmin"></interceptor-ref>
+            </interceptor-stack>
+
+            <interceptor name="MyInterceptorUser" class="com.csw.interceptor.MyInterceptorUser"></interceptor>
+            <interceptor-stack name="myDefaultStack_u">
+                <interceptor-ref name="defaultStack"></interceptor-ref>
+                <interceptor-ref name="MyInterceptorUser"></interceptor-ref>
+            </interceptor-stack>
+        </interceptors>
+
+        <!-- //订单下一步提交模块 -->
+        <action name="address_*" class="com.csw.controller.OrderAction"
+                method="{1}">
+            <interceptor-ref name="myDefaultStack_u"></interceptor-ref>
+            <result name="order_ok">/front/order/order_ok.jsp</result>
+            <result name="address_form">/front/order/address_form.jsp</result>
+            <result name="orderNextAction" type="redirectAction">/address_orderNextAction
+            </result>
+            <result name="userlogin">/front/user/login_form.jsp</result>
+            <result name="active" type="redirectAction">
+                <param name="namespace">/user</param>
+                <param name="actionName">/user_registNextAction</param>
+            </result>
+        </action>
+
+        <action name="backorder_*" class="com.csw.controller.OrderAction"
+                method="{1}">
+            <interceptor-ref name="myDefaultStack_h"></interceptor-ref>
+            <result name="show">/back/order/show.jsp</result>
+            <result name="detail">/back/order/detail.jsp</result>
+            <result name="safeOut">/back/login2.jsp</result>
+        </action>
+
+    </package>
+
+
+</struts>

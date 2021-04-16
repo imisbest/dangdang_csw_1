@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csw.dao.Category1Dao">
+
+    <resultMap type="category" id="cateMap">
+        <id column="pid" property="id"/>
+        <result column="pname" property="name"/>
+        <result column="ppid" property="parent_id"/>
+        <result column="plevels" property="levels"/>
+        <association property="category" javaType="Category">
+            <id column="sid" property="id"/>
+            <result column="sname" property="name"/>
+            <result column="spid" property="parent_id"/>
+            <result column="slevels" property="levels"/>
+        </association>
+
+    </resultMap>
+    <!-- 查询二级类别对应的一级类别 -->
+    <select id="queryAll" resultMap="cateMap">
+		select p.id as pid,p.name as
+		pname,p.parent_id as ppid,p.levels as plevels,
+		s.id as sid,s.name as
+		sname,s.parent_id as spid,s.levels as slevels
+		from dd_category p left
+		join dd_category s on p.parent_id=s.id
+	</select>
+
+    <!-- -->
+    <select id="queryfirstAndSecond" resultMap="cateMap">
+		select p.id as pid,p.name as
+		pname,p.parent_id as ppid,p.levels as plevels,
+		s.id as sid,s.name as
+		sname,s.parent_id as spid,s.levels as slevels
+		from dd_category p left
+		join dd_category s on p.parent_id=s.id
+		 where
+		s.levels=#{levels}
+	</select>
+
+    <select id="queryByparentid" resultType="Category">
+		select
+		id,name,parent_id,levels from dd_category where name=#{name} and
+		levels=#{levels}
+	</select>
+
+    <select id="queryAllCategory" resultType="Category">
+		select * from
+		dd_category where levels=#{levels}
+	</select>
+
+    <insert id="insert">
+		insert into dd_category values
+		(#{id},#{name},#{parent_id,jdbcType=NULL},#{levels})
+	</insert>
+
+    <delete id="deleteBy">
+		delete dd_category where id=#{1}
+	</delete>
+
+    <select id="queryParent_id" resultType="Category">
+		select * from dd_category
+		where parent_id=#{id}
+	</select>
+    <!-- 前台分类 -->
+    <select id="querySecondCategoryByFirstCategoryId" resultMap="cateMap">
+	select p.id as pid,p.name as
+		pname,p.parent_id as ppid,p.levels as plevels,
+		s.id as sid,s.name as
+		sname,s.parent_id as spid,s.levels as slevels
+		from dd_category p left
+		join dd_category s on p.parent_id=s.id
+		where s.id=#{id}
+	</select>
+
+    <select id="queryCategoryId" resultType="Category">
+		select * from dd_category
+		where id=#{id1}
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.csw.dao.UserDao">
+
+    <select id="queryBy" resultType="User">
+		select * from dd_user
+		where
+		email=#{1}
+	</select>
+    <!-- private String id; private String email; private String nickname; private
+        String password; private String status; private String code; private String
+        salt; private Date create_date; -->
+    <insert id="regist">
+		insert into dd_user
+		values(#{id},#{email},#{nickname},#{password},#{status},#{code,jdbcType=NULL},#{salt},#{create_date})
+	</insert>
+
+    <select id="query" resultType="User">
+		select * from dd_user where email=#{1}
+	</select>
+
+    <select id="querysalt" resultType="java.lang.String">
+		select salt from dd_user where email=#{1}
+	</select>
+
+    <select id="queryAllUser" resultType="User">
+	select * from dd_user
+	</select>
+    <select id="queryByID" resultType="User">
+	select * from dd_user where id=#{1}
+	</select>
+    <update id="update">
+	update dd_user set status=#{status},code=#{code} where id=#{id}
+	</update>
+    <update id="updateht">
+	update dd_user set status=#{status} where id=#{id}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
